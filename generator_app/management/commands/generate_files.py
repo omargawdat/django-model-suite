@@ -21,11 +21,9 @@ from generator_app.generators.model_utils import get_model_fields
 
 
 class Command(BaseCommand):
-    help = "Generates admin, API, and domain files for Django apps"
-
     COMPONENT_CONFIGS = {
         "admin": {
-            "path": "admin",
+            "path_template": "admin/{model}/",  # Will generate admin/user/
             "generators": [
                 FieldsGenerator,
                 ListViewGenerator,
@@ -36,7 +34,7 @@ class Command(BaseCommand):
             ],
         },
         "api": {
-            "path": "api",
+            "path_template": "api/{model}/",
             "generators": [
                 SerializerGenerator,
                 ViewGenerator,
@@ -46,15 +44,15 @@ class Command(BaseCommand):
             ],
         },
         "selectors": {
-            "path": "domain/selectors",
+            "path_template": "domain/selectors/",
             "generators": [SelectorGenerator],
         },
         "services": {
-            "path": "domain/services",
+            "path_template": "domain/services/",
             "generators": [ServiceGenerator],
         },
         "validators": {
-            "path": "domain/validators",
+            "path_template": "domain/validators/",
             "generators": [ValidatorGenerator],
         },
     }
@@ -103,7 +101,8 @@ class Command(BaseCommand):
             config: dict,
             fields: list,
     ) -> None:
-        base_path = os.path.join(app_path, config["path"])
+        path_template = config["path_template"].format(model=model_name.lower())
+        base_path = os.path.join(app_path, path_template)
         self.stdout.write(f"Generating {component} in {base_path}")
 
         generators = [

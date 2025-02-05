@@ -11,15 +11,10 @@ class BaseGenerator(ABC):
         self.base_path = base_path
         self.model_name_capital = model_name.capitalize()
         self.model_name_lower = model_name.lower()
-        self.is_domain = any(x in base_path for x in ['selectors', 'services', 'validators'])
 
     def write_file(self, filename: str, content: str) -> None:
-        if self.is_domain:
-            target_dir = self.base_path
-            full_path = os.path.join(target_dir, f"{self.model_name_lower}.py")
-        else:
-            target_dir = os.path.join(self.base_path, self.model_name_lower)
-            full_path = os.path.join(target_dir, filename)
+        target_dir = self.base_path
+        full_path = os.path.join(target_dir, filename)
 
         ensure_package(target_dir)
         if os.path.exists(full_path):

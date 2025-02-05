@@ -1,7 +1,5 @@
 from rest_framework import serializers
-
 from appss.app.models.lol import Book
-
 
 class BookMinimalSerializer(serializers.ModelSerializer):
     class Meta:

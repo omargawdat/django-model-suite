@@ -13,12 +13,10 @@ class AdminGenerator(BaseGenerator):
         model_import_path = f"{self.model.__module__}"
         content = f'''from django.contrib import admin
 from unfold.admin import ModelAdmin
-# from common.base.basemodeladmin import BaseModelAdmin  # Uncomment if using BaseModelAdmin
 from .list_view import {self.model_name_capital}ListView
 from .change_view import {self.model_name_capital}ChangeView
 from .permissions import {self.model_name_capital}Permissions
 from .display import {self.model_name_capital}DisplayMixin
-from .fields import {self.model_name_capital}Fields
 from {model_import_path} import {self.model_name_capital}
 
 @admin.register({self.model_name_capital})
