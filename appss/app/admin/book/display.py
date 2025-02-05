@@ -1,5 +1,5 @@
 from unfold.decorators import display
-from apps.app.models import Book
+from appss.app.models.lol import Book
 
 class BookDisplayMixin:
     @display(description="book", header=True)

@@ -1,5 +1,5 @@
 from django.db.models import QuerySet
-from Book import Book
+from appss.app.models.lol import Book
 
 class BookSelector:
     @staticmethod

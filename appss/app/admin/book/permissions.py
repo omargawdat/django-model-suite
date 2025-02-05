@@ -1,11 +1,13 @@
 from dataclasses import dataclass
 
+from .fields import BookFields
+
+
 @dataclass
 class FieldPermissions:
     visible: bool = False
     editable: bool = False
 
-from .fields import BookFields
 
 class BookPermissions:
     def has_delete_permission(self, request, obj=None):
@@ -23,19 +25,19 @@ class BookPermissions:
             BookFields.ID: FieldPermissions(
                 visible=False,
                 editable=False,
-            ),            BookFields.TITLE: FieldPermissions(
+            ), BookFields.TITLE: FieldPermissions(
                 visible=False,
                 editable=False,
-            ),            BookFields.AUTHOR: FieldPermissions(
+            ), BookFields.AUTHOR: FieldPermissions(
                 visible=False,
                 editable=False,
-            ),            BookFields.PUBLICATION_DATE: FieldPermissions(
+            ), BookFields.PUBLICATION_DATE: FieldPermissions(
                 visible=False,
                 editable=False,
-            ),            BookFields.NUM_PAGES: FieldPermissions(
+            ), BookFields.NUM_PAGES: FieldPermissions(
                 visible=False,
                 editable=False,
-            ),            BookFields.IS_BORROWED: FieldPermissions(
+            ), BookFields.IS_BORROWED: FieldPermissions(
                 visible=False,
                 editable=False,
             )

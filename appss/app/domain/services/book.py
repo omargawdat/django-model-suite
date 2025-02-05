@@ -1,5 +1,5 @@
 from typing import Any
-from Book import Book
+from appss.app.models.lol import Book
 
 class BookService:
     @staticmethod

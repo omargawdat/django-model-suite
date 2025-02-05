@@ -1,5 +1,3 @@
-from typing import List, Type
-
 from .admin.admin_generator import AdminGenerator
 from .admin.change_view_generator import ChangeViewGenerator
 from .admin.display_generator import DisplayGenerator
@@ -18,7 +16,7 @@ from .domain.validator_generator import ValidatorGenerator
 
 
 class GeneratorFactory:
-    GENERATORS: dict[str, List[Type[BaseGenerator]]] = {
+    GENERATORS = {
         "admin": [
             FieldsGenerator,
             ListViewGenerator,
@@ -36,18 +34,18 @@ class GeneratorFactory:
         ],
         "selectors": [SelectorGenerator],
         "services": [ServiceGenerator],
-        "validators": [ValidatorGenerator],
+        "validators": [ValidatorGenerator]
     }
 
     @classmethod
     def create_generators(
         cls, app_name: str, model_name: str, base_path: str, generator_type: str
-    ) -> List[BaseGenerator]:
+    ) -> list[BaseGenerator]:
         if generator_type not in cls.GENERATORS:
-            valid_types = ", ".join(cls.GENERATORS.keys())
             raise ValueError(
-                f"Invalid generator type '{generator_type}'. Must be one of: {valid_types}"
+                f"Invalid generator type. Must be one of: {', '.join(cls.GENERATORS.keys())}"
             )
+
         return [
             generator_class(app_name, model_name, base_path)
             for generator_class in cls.GENERATORS[generator_type]

@@ -1,10 +1,18 @@
+# serializer_generator.py
+from django.apps import apps
+
 from generator_app.generators.base import BaseGenerator
 
 
 class SerializerGenerator(BaseGenerator):
+    def __init__(self, app_name: str, model_name: str, base_path: str):
+        super().__init__(app_name, model_name, base_path)
+        self.model = apps.get_model(app_label=self.app_name, model_name=self.model_name)
+
     def generate(self, fields: list) -> None:
+        model_import_path = f"{self.model.__module__}"
         content = f"""from rest_framework import serializers
-from apps.{self.app_name}.models.{self.model_name_lower} import {self.model_name_capital}
+from {model_import_path} import {self.model_name_capital}
 
 class {self.model_name_capital}MinimalSerializer(serializers.ModelSerializer):
     class Meta:

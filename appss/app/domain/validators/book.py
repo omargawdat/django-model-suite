@@ -1,6 +1,6 @@
 from typing import Any
 from django.core.exceptions import ValidationError
-from Book import Book
+from appss.app.models.lol import Book
 
 def validate_book_create(*, data: dict[str, Any]) -> dict[str, Any]:
     # Add your validation logic here

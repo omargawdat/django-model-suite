@@ -11,13 +11,14 @@ class PermissionsGenerator(BaseGenerator):
         ]
 
         content = f'''from dataclasses import dataclass
+from .fields import {self.model_name_capital}Fields
+
 
 @dataclass
 class FieldPermissions:
     visible: bool = False
     editable: bool = False
 
-from .fields import {self.model_name_capital}Fields
 
 class {self.model_name_capital}Permissions:
     def has_delete_permission(self, request, obj=None):
