@@ -3,7 +3,20 @@ import os
 from django.apps import apps
 from django.core.management import BaseCommand
 
-from generator_app.generators.factory import GeneratorFactory
+from generator_app.generators.admin.admin_generator import AdminGenerator
+from generator_app.generators.admin.change_view_generator import ChangeViewGenerator
+from generator_app.generators.admin.display_generator import DisplayGenerator
+from generator_app.generators.admin.fields_generator import FieldsGenerator
+from generator_app.generators.admin.list_view_generator import ListViewGenerator
+from generator_app.generators.admin.permissions_generator import PermissionsGenerator
+from generator_app.generators.api.filter_generator import FilterGenerator
+from generator_app.generators.api.pagination_generator import PaginationGenerator
+from generator_app.generators.api.serializer_generator import SerializerGenerator
+from generator_app.generators.api.url_generator import URLGenerator
+from generator_app.generators.api.view_generator import ViewGenerator
+from generator_app.generators.domain.selector_generator import SelectorGenerator
+from generator_app.generators.domain.service_generator import ServiceGenerator
+from generator_app.generators.domain.validator_generator import ValidatorGenerator
 from generator_app.generators.model_utils import get_model_fields
 
 
@@ -11,11 +24,39 @@ class Command(BaseCommand):
     help = "Generates admin, API, and domain files for Django apps"
 
     COMPONENT_CONFIGS = {
-        "admin": {"path": "admin"},
-        "api": {"path": "api"},
-        "selectors": {"path": "domain/selectors"},
-        "services": {"path": "domain/services"},
-        "validators": {"path": "domain/validators"},
+        "admin": {
+            "path": "admin",
+            "generators": [
+                FieldsGenerator,
+                ListViewGenerator,
+                ChangeViewGenerator,
+                PermissionsGenerator,
+                DisplayGenerator,
+                AdminGenerator,
+            ],
+        },
+        "api": {
+            "path": "api",
+            "generators": [
+                SerializerGenerator,
+                ViewGenerator,
+                URLGenerator,
+                FilterGenerator,
+                PaginationGenerator,
+            ],
+        },
+        "selectors": {
+            "path": "domain/selectors",
+            "generators": [SelectorGenerator],
+        },
+        "services": {
+            "path": "domain/services",
+            "generators": [ServiceGenerator],
+        },
+        "validators": {
+            "path": "domain/validators",
+            "generators": [ValidatorGenerator],
+        },
     }
 
     def add_arguments(self, parser):
@@ -23,7 +64,6 @@ class Command(BaseCommand):
         parser.add_argument("model_name", type=str, help="Name of the model")
 
     def get_app_path(self, app_name: str) -> str:
-        """Retrieve the full file-system path for the given app."""
         try:
             app_config = apps.get_app_config(app_name)
             app_path = os.path.dirname(app_config.module.__file__)
@@ -31,18 +71,6 @@ class Command(BaseCommand):
             return app_path
         except LookupError:
             raise ValueError(f"App '{app_name}' not found in INSTALLED_APPS")
-
-    @staticmethod
-    def ensure_package_path(path: str) -> None:
-        """
-        Ensure that the directory exists and contains an __init__.py file.
-        (This makes the directory a valid Python package.)
-        """
-        os.makedirs(path, exist_ok=True)
-        init_file = os.path.join(path, "__init__.py")
-        if not os.path.exists(init_file):
-            with open(init_file, "w") as f:
-                f.write("")
 
     def handle(self, *args, **options):
         app_name = options["app_name"]
@@ -57,15 +85,12 @@ class Command(BaseCommand):
 
             for component, config in self.COMPONENT_CONFIGS.items():
                 self._generate_component(
-                    app_path, app_name, model_name, component, config["path"], fields
+                    app_path, app_name, model_name, component, config, fields
                 )
 
             self.stdout.write(
-                self.style.SUCCESS(
-                    f"Successfully generated files for model '{model_name}'"
-                )
+                self.style.SUCCESS(f"Successfully generated files for model '{model_name}'")
             )
-
         except Exception as e:
             self.stdout.write(self.style.ERROR(f"Error: {e}"))
 
@@ -75,18 +100,16 @@ class Command(BaseCommand):
             app_name: str,
             model_name: str,
             component: str,
-            component_path: str,
+            config: dict,
             fields: list,
     ) -> None:
-        base_path = os.path.join(app_path, component_path)
+        base_path = os.path.join(app_path, config["path"])
         self.stdout.write(f"Generating {component} in {base_path}")
 
-        # Ensure the target directories are valid Python packages.
-        self.ensure_package_path(app_path)
-        self.ensure_package_path(base_path)
+        generators = [
+            generator_class(app_name, model_name, base_path)
+            for generator_class in config["generators"]
+        ]
 
-        generators = GeneratorFactory.create_generators(
-            app_name, model_name, base_path, component
-        )
         for generator in generators:
             generator.generate(fields)
