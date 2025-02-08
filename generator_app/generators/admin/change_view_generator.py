@@ -5,7 +5,7 @@ class ChangeViewGenerator(BaseGenerator):
     def generate(self, fields: list) -> None:
         content = f'''class {self.model_name_capital}ChangeView:
     filter_horizontal = ()
-    compressed_fields = False
+    compressed_fields = True
     autocomplete_fields = ()
     fieldsets = (
         ("Information", {{"fields": ()}}),

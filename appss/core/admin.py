@@ -29,7 +29,8 @@ class DynamicAdminFields(ABC):
         if not base_fieldsets:
             all_fields = self.get_fields(request, obj)
             visible_fields = [
-                field for field in all_fields if field_rules.get(field, FieldPermissions()).visible
+                field for field in all_fields
+                if field_rules.get(field, FieldPermissions()).visible
             ]
             return ((None, {"fields": visible_fields}),) if visible_fields else ()
 
@@ -39,8 +40,7 @@ class DynamicAdminFields(ABC):
                 continue
 
             visible_fields = [
-                field
-                for field in options["fields"]
+                field for field in options["fields"]
                 if field_rules.get(field, FieldPermissions()).visible
             ]
 
@@ -71,6 +71,36 @@ class DynamicAdminFields(ABC):
                 del form.base_fields[field]
 
         return form
+
+    def get_list_display(self, request):
+        field_rules = self.get_field_rules(request)
+        base_list_display = getattr(self, "list_display", ())
+        return tuple(
+            field for field in base_list_display
+            if field not in field_rules or field_rules[field].visible
+        )
+
+    def get_list_editable(self, request):
+        """
+        Filters the ModelAdmin's list_editable fields using the field rules.
+        """
+        field_rules = self.get_field_rules(request)
+        # Retrieve the current list_editable (if defined)
+        list_editable = getattr(self, "list_editable", ())
+        # Only include fields that are marked editable in our field rules.
+        return tuple(
+            field for field in list_editable
+            if field_rules.get(field, FieldPermissions()).editable
+        )
+
+    def changelist_view(self, request, extra_context=None):
+        """
+        Override the changelist view to dynamically update list_editable.
+        """
+        if hasattr(self, "list_editable"):
+            self.list_editable = self.get_list_editable(request)
+        return super().changelist_view(request, extra_context=extra_context)
+
 
 
 class BaseModelAdminMeta(ModelAdmin.__class__, ABCMeta):
