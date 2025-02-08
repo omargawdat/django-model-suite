@@ -11,7 +11,7 @@ setup(
     description="A Django app for generating boilerplate code",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/omargawdat/django-blueprint",
+    url="https://github.com/omargawdat/django-model-suite",
     packages=find_packages(),
     classifiers=[
         "Development Status :: 3 - Alpha",
