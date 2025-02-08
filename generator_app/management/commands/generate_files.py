@@ -5,8 +5,9 @@ from django.core.management import BaseCommand
 
 from generator_app.generators.admin.admin_generator import AdminGenerator
 from generator_app.generators.admin.change_view_generator import ChangeViewGenerator
+from generator_app.generators.admin.context_generator import ContextGenerator
 from generator_app.generators.admin.display_generator import DisplayGenerator
-from generator_app.generators.admin.fields_generator import FieldsGenerator
+from generator_app.generators.field.fields_generator import FieldsGenerator
 from generator_app.generators.admin.list_view_generator import ListViewGenerator
 from generator_app.generators.admin.permissions_generator import PermissionsGenerator
 from generator_app.generators.api.filter_generator import FilterGenerator
@@ -22,13 +23,19 @@ from generator_app.generators.model_utils import get_model_fields
 
 class Command(BaseCommand):
     COMPONENT_CONFIGS = {
-        "admin": {
-            "path_template": "admin/{model}/",  # Will generate admin/user/
+        "fields": {
+            "path_template": "fields/",
             "generators": [
                 FieldsGenerator,
+            ],
+        },
+        "admin": {
+            "path_template": "admin/{model}/",
+            "generators": [
                 ListViewGenerator,
                 ChangeViewGenerator,
                 PermissionsGenerator,
+                ContextGenerator,
                 DisplayGenerator,
                 AdminGenerator,
             ],
@@ -43,6 +50,7 @@ class Command(BaseCommand):
                 PaginationGenerator,
             ],
         },
+
         "selectors": {
             "path_template": "domain/selectors/",
             "generators": [SelectorGenerator],

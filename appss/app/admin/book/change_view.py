@@ -1,7 +1,7 @@
 class BookChangeView:
-    FILTER_HORIZONTAL = ()
-    COMPRESSED_FIELDS = False
-    AUTOCOMPLETE_FIELDS = ()
-    FIELDSETS = (
+    filter_horizontal = ()
+    compressed_fields = False
+    autocomplete_fields = ()
+    fieldsets = (
         ("Information", {"fields": ()}),
     )

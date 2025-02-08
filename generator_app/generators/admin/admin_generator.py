@@ -18,14 +18,15 @@ from .change_view import {self.model_name_capital}ChangeView
 from .permissions import {self.model_name_capital}Permissions
 from .display import {self.model_name_capital}DisplayMixin
 from {model_import_path} import {self.model_name_capital}
+from ....core.admin import BaseModelAdmin
 
 @admin.register({self.model_name_capital})
 class {self.model_name_capital}Admin(
-    ModelAdmin,  # Change to BaseModelAdmin if using base model admin
     {self.model_name_capital}DisplayMixin,
     {self.model_name_capital}ListView,
     {self.model_name_capital}ChangeView,
-    {self.model_name_capital}Permissions
+    {self.model_name_capital}Permissions,
+    BaseModelAdmin,
 ):
     pass
 '''
