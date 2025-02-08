@@ -22,7 +22,7 @@ class PermissionsGenerator(BaseGenerator):
         content = f"""from typing import Optional, Dict
 from django.http import HttpRequest
 from ...fields.{self.model_name_lower} import {self.model_name_capital}Fields
-from ....core.admin import FieldPermissions
+from django_model_suite.admin import FieldPermissions
 from {self.model.__module__} import {self.model_name_capital}
 from .context import {self.model_name_capital}ContextLogic
 

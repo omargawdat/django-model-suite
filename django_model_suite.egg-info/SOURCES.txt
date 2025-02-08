@@ -7,6 +7,7 @@ AppGenerator/settings.py
 AppGenerator/urls.py
 AppGenerator/wsgi.py
 django_model_suite/__init__.py
+django_model_suite/admin.py
 django_model_suite/apps.py
 django_model_suite.egg-info/PKG-INFO
 django_model_suite.egg-info/SOURCES.txt
