@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="django-model-generator",
-    version="0.1.0",
+    version="0.1.1",
     author="Your Name",
     author_email="your.email@example.com",
     description="A Django app for generating boilerplate code",
@@ -29,5 +29,8 @@ setup(
     python_requires=">=3.8",
     install_requires=[
         "Django>=3.2",
+        "django-unfold>=0.5.0",
+        "djangorestframework>=3.14.0",
+        "django-filter>=23.0",
     ],
 )

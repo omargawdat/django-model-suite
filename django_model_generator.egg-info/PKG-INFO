@@ -1,6 +1,6 @@
 Metadata-Version: 2.2
 Name: django-model-generator
-Version: 0.1.0
+Version: 0.1.1
 Summary: A Django app for generating boilerplate code
 Home-page: https://github.com/yourusername/django-model-generator
 Author: Your Name
@@ -19,6 +19,9 @@ Classifier: Programming Language :: Python :: 3.11
 Requires-Python: >=3.8
 Description-Content-Type: text/markdown
 Requires-Dist: Django>=3.2
+Requires-Dist: django-unfold>=0.5.0
+Requires-Dist: djangorestframework>=3.14.0
+Requires-Dist: django-filter>=23.0
 Dynamic: author
 Dynamic: author-email
 Dynamic: classifier
