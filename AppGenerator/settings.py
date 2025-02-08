@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'generator_app',
+    'django_model_suite',
     'appss.app',
     "appss.core"
 ]

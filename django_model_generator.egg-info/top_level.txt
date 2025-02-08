@@ -1,3 +1,0 @@
-AppGenerator
-appss
-generator_app

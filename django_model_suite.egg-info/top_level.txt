@@ -1,0 +1,3 @@
+AppGenerator
+appss
+django_model_suite
