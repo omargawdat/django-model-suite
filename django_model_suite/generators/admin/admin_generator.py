@@ -12,7 +12,6 @@ class AdminGenerator(BaseGenerator):
     def generate(self, fields: list) -> None:
         model_import_path = f"{self.model.__module__}"
         content = f'''from django.contrib import admin
-from unfold.admin import ModelAdmin
 from .list_view import {self.model_name_capital}ListView
 from .change_view import {self.model_name_capital}ChangeView
 from .permissions import {self.model_name_capital}Permissions
