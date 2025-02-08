@@ -1,6 +1,6 @@
 Metadata-Version: 2.2
 Name: django_model_suite
-Version: 0.1.6
+Version: 0.1.7
 Summary: A Django app for generating boilerplate code
 Home-page: https://github.com/omargawdat/django-model-suite
 Author: Omar Gawdat
