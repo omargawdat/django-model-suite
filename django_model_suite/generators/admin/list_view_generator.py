@@ -14,7 +14,6 @@ class ListViewGenerator(BaseGenerator):
     list_horizontal_scrollbar_top = False
     search_fields = ()
     search_help_text = ""
-    ordering = ()
 
     def get_ordering(self, request):
         return ()

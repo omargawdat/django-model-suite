@@ -14,7 +14,7 @@ class ServiceGenerator(BaseGenerator):
         model_import_path = f"{self.model.__module__}"
         content = f'''from typing import Any
 from {model_import_path} import {self.model_name_capital}
-from ..validators.book import validate_book_create, validate_book_update
+from ..validators.{self.model_name_lower} import validate_{self.model_name_lower}_create, validate_{self.model_name_lower}_update
 
 class {self.model_name_capital}Service:
     @staticmethod
