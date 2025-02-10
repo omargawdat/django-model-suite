@@ -7,7 +7,6 @@ from django_model_suite.generators.admin.admin_generator import AdminGenerator
 from django_model_suite.generators.admin.change_view_generator import ChangeViewGenerator
 from django_model_suite.generators.admin.context_generator import ContextGenerator
 from django_model_suite.generators.admin.display_generator import DisplayGenerator
-from django_model_suite.generators.field.fields_generator import FieldsGenerator
 from django_model_suite.generators.admin.list_view_generator import ListViewGenerator
 from django_model_suite.generators.admin.permissions_generator import PermissionsGenerator
 from django_model_suite.generators.api.filter_generator import FilterGenerator
@@ -18,6 +17,7 @@ from django_model_suite.generators.api.view_generator import ViewGenerator
 from django_model_suite.generators.domain.selector_generator import SelectorGenerator
 from django_model_suite.generators.domain.service_generator import ServiceGenerator
 from django_model_suite.generators.domain.validator_generator import ValidatorGenerator
+from django_model_suite.generators.field.fields_generator import FieldsGenerator
 from django_model_suite.generators.model_utils import get_model_fields
 
 
@@ -50,7 +50,6 @@ class Command(BaseCommand):
                 PaginationGenerator,
             ],
         },
-
         "selectors": {
             "path_template": "domain/selectors/",
             "generators": [SelectorGenerator],
@@ -68,6 +67,13 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument("app_name", type=str, help="Name of the app (e.g., user)")
         parser.add_argument("model_name", type=str, help="Name of the model")
+        parser.add_argument(
+            "--components",
+            nargs="+",
+            choices=["all"] + list(self.COMPONENT_CONFIGS.keys()),
+            default=["all"],
+            help="Specify components to generate (e.g., --components admin services). Use 'all' to generate everything.",
+        )
 
     def get_app_path(self, app_name: str) -> str:
         try:
@@ -81,6 +87,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         app_name = options["app_name"]
         model_name = options["model_name"]
+        selected_components = options["components"]
 
         try:
             app_path = self.get_app_path(app_name)
@@ -89,10 +96,18 @@ class Command(BaseCommand):
 
             fields = get_model_fields(app_name, model_name)
 
-            for component, config in self.COMPONENT_CONFIGS.items():
-                self._generate_component(
-                    app_path, app_name, model_name, component, config, fields
-                )
+            components_to_generate = (
+                self.COMPONENT_CONFIGS.keys()
+                if "all" in selected_components
+                else selected_components
+            )
+
+            for component in components_to_generate:
+                config = self.COMPONENT_CONFIGS.get(component)
+                if config:
+                    self._generate_component(
+                        app_path, app_name, model_name, component, config, fields
+                    )
 
             self.stdout.write(
                 self.style.SUCCESS(f"Successfully generated files for model '{model_name}'")
