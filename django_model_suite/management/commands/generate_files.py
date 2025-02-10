@@ -70,9 +70,8 @@ class Command(BaseCommand):
         parser.add_argument(
             "--components",
             nargs="+",
-            choices=["all"] + list(self.COMPONENT_CONFIGS.keys()),
-            default=["all"],
-            help="Specify components to generate (e.g., --components admin services). Use 'all' to generate everything.",
+            choices=["admin", "domain", "api"] + list(self.COMPONENT_CONFIGS.keys()),
+            help="Specify components to generate (e.g., --components admin services). If not specified, all components will be generated.",
         )
 
     def get_app_path(self, app_name: str) -> str:
@@ -87,7 +86,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         app_name = options["app_name"]
         model_name = options["model_name"]
-        selected_components = options["components"]
+        selected_components = options.get("components")
 
         try:
             app_path = self.get_app_path(app_name)
@@ -96,11 +95,21 @@ class Command(BaseCommand):
 
             fields = get_model_fields(app_name, model_name)
 
-            components_to_generate = (
-                self.COMPONENT_CONFIGS.keys()
-                if "all" in selected_components
-                else selected_components
-            )
+            if not selected_components:
+                components_to_generate = self.COMPONENT_CONFIGS.keys()
+            else:
+                components_to_generate = []
+                if "admin" in selected_components:
+                    components_to_generate.extend(["fields", "admin"])
+                if "domain" in selected_components:
+                    components_to_generate.extend(["selectors", "services", "validators"])
+                if "api" in selected_components:
+                    components_to_generate.append("api")
+                components_to_generate.extend(
+                    [comp for comp in selected_components if comp in self.COMPONENT_CONFIGS]
+                )
+
+            components_to_generate = list(set(components_to_generate))  # Remove duplicates
 
             for component in components_to_generate:
                 config = self.COMPONENT_CONFIGS.get(component)
