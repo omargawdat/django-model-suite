@@ -1,6 +1,6 @@
 Metadata-Version: 2.2
 Name: django_model_suite
-Version: 0.1.9
+Version: 0.1.11
 Summary: A Django app for generating boilerplate code
 Home-page: https://github.com/omargawdat/django-model-suite
 Author: Omar Gawdat
@@ -91,7 +91,7 @@ pip install django-model-suite
 1. **Run the command** to generate files for a specific model
 
    ```bash
-    python manage.py generate_files <app_name> <model_name>
+    python manage.py generate_files <app_name> <model_name> --components admin domain api
     ```
    example: 
    ```bash

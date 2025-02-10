@@ -59,7 +59,7 @@ pip install django-model-suite
 1. **Run the command** to generate files for a specific model
 
    ```bash
-    python manage.py generate_files <app_name> <model_name> --components admin services selectors services validators api fields
+    python manage.py generate_files <app_name> <model_name> --components admin domain api
     ```
    example: 
    ```bash
