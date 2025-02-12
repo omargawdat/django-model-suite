@@ -13,6 +13,7 @@ app/models.py
 app/tests.py
 app/views.py
 app/migrations/0001_initial.py
+app/migrations/0002_unrelatedmodel.py
 app/migrations/__init__.py
 django_model_suite/__init__.py
 django_model_suite/admin.py
