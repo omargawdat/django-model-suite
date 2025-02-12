@@ -6,6 +6,14 @@ AppGenerator/asgi.py
 AppGenerator/settings.py
 AppGenerator/urls.py
 AppGenerator/wsgi.py
+app/__init__.py
+app/admin.py
+app/apps.py
+app/models.py
+app/tests.py
+app/views.py
+app/migrations/0001_initial.py
+app/migrations/__init__.py
 django_model_suite/__init__.py
 django_model_suite/admin.py
 django_model_suite/apps.py
