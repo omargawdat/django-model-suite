@@ -1,30 +1,23 @@
 # service_generator.py
-from django.apps import apps
-
 from ..base import BaseGenerator
 
-
 class ServiceGenerator(BaseGenerator):
-    def __init__(self, app_name: str, model_name: str, base_path: str):
-        super().__init__(app_name, model_name, base_path)
-        self.output_path = "domain/services"
-        self.model = apps.get_model(app_label=self.app_name, model_name=self.model_name)
-
     def generate(self, fields: list) -> None:
+        model_name = self.model.__name__
         model_import_path = f"{self.model.__module__}"
         content = f'''from typing import Any
-from {model_import_path} import {self.model_name_capital}
+from {model_import_path} import {model_name}
 from ..validators.{self.model_name_lower} import validate_{self.model_name_lower}_create, validate_{self.model_name_lower}_update
 
-class {self.model_name_capital}Service:
+class {model_name}Service:
     @staticmethod
-    def create_{self.model_name_lower}(*, data: dict[str, Any]) -> {self.model_name_capital}:
+    def create_{self.model_name_lower}(*, data: dict[str, Any]) -> {model_name}:
         validated_data = validate_{self.model_name_lower}_create(data=data)
-        instance = {self.model_name_capital}.objects.create(**validated_data)
+        instance = {model_name}.objects.create(**validated_data)
         return instance
 
     @staticmethod
-    def update_{self.model_name_lower}(*, instance: {self.model_name_capital}, data: dict[str, Any]) -> {self.model_name_capital}:
+    def update_{self.model_name_lower}(*, instance: {model_name}, data: dict[str, Any]) -> {model_name}:
         validated_data = validate_{self.model_name_lower}_update(instance=instance, data=data)
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -32,7 +25,7 @@ class {self.model_name_capital}Service:
         return instance
 
     @staticmethod
-    def delete_{self.model_name_lower}(*, instance: {self.model_name_capital}) -> None:
+    def delete_{self.model_name_lower}(*, instance: {model_name}) -> None:
         instance.delete()
 '''
         self.write_file(f'{self.model_name_lower}.py', content)

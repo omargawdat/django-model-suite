@@ -1,16 +1,21 @@
 import os
+import re
 from abc import ABC, abstractmethod
 
 from django_model_suite.generators.model_utils import ensure_package
 
 
 class BaseGenerator(ABC):
-    def __init__(self, app_name: str, model_name: str, base_path: str):
-        self.app_name = app_name
-        self.model_name = model_name
+    def __init__(self, app_name: str, model_name: str, base_path: str, model_class):
         self.base_path = base_path
-        self.model_name_capital = model_name.capitalize()
-        self.model_name_lower = model_name.lower()
+        self.model = model_class
+        self.model_name_lower = self._to_snake_case(self.model.__name__)
+
+    def _to_snake_case(self, name: str) -> str:
+        """Convert CamelCase to snake_case (e.g., TestModelRelated -> test_model_related)"""
+        pattern = re.compile(r'(?<!^)(?=[A-Z])')
+
+        return pattern.sub('_', name).lower()
 
     def write_file(self, filename: str, content: str) -> None:
         target_dir = self.base_path

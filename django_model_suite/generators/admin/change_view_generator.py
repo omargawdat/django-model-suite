@@ -1,9 +1,10 @@
+# change_view_generator.py
 from ..base import BaseGenerator
-
 
 class ChangeViewGenerator(BaseGenerator):
     def generate(self, fields: list) -> None:
-        content = f'''class {self.model_name_capital}ChangeView:
+        model_name = self.model.__name__
+        content = f'''class {model_name}ChangeView:
     filter_horizontal = ()
     compressed_fields = True
     autocomplete_fields = ()

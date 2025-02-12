@@ -1,23 +1,17 @@
+# context_generator.py
 from typing import List
-
-from django.apps import apps
-
 from ..base import BaseGenerator
 
-
 class ContextGenerator(BaseGenerator):
-    def __init__(self, app_name: str, model_name: str, base_path: str):
-        super().__init__(app_name, model_name, base_path)
-        self.model = apps.get_model(app_label=self.app_name, model_name=self.model_name)
-
-    def generate(self, fields: List[str] = None) -> None:  # Add fields parameter with default None
+    def generate(self, fields: List[str] = None) -> None:
+        model_name = self.model.__name__
         content = f"""from typing import Optional
 from django.http import HttpRequest
-from {self.model.__module__} import {self.model_name_capital}
+from {self.model.__module__} import {model_name}
 
 
-class {self.model_name_capital}ContextLogic:
-    def __init__(self, request: HttpRequest, {self.model_name_lower}: Optional[{self.model_name_capital}] = None):
+class {model_name}ContextLogic:
+    def __init__(self, request: HttpRequest, {self.model_name_lower}: Optional[{model_name}] = None):
         self.request = request
         self.{self.model_name_lower} = {self.model_name_lower}
 

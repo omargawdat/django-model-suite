@@ -1,16 +1,14 @@
+# permissions_generator.py
 from typing import List
-from django.apps import apps
+
 from ..base import BaseGenerator
 
 
 class PermissionsGenerator(BaseGenerator):
-    def __init__(self, app_name: str, model_name: str, base_path: str):
-        super().__init__(app_name, model_name, base_path)
-        self.model = apps.get_model(app_label=self.app_name, model_name=self.model_name)
-
     def generate(self, fields: List[str]) -> None:
+        model_name = self.model.__name__
         field_rules = [
-            f"            {self.model_name_capital}Fields.{field.upper()}: FieldPermissions(\n"
+            f"            {model_name}Fields.{field.upper()}: FieldPermissions(\n"
             "                visible=(\n"
             "                    context.is_superuser\n"
             "                ),\n"
@@ -21,24 +19,24 @@ class PermissionsGenerator(BaseGenerator):
 
         content = f"""from typing import Optional, Dict
 from django.http import HttpRequest
-from ...fields.{self.model_name_lower} import {self.model_name_capital}Fields
+from ...fields.{self.model_name_lower} import {model_name}Fields
 from django_model_suite.admin import FieldPermissions
-from {self.model.__module__} import {self.model_name_capital}
-from .context import {self.model_name_capital}ContextLogic
+from {self.model.__module__} import {model_name}
+from .context import {model_name}ContextLogic
 
 
-class {self.model_name_capital}Permissions:
+class {model_name}Permissions:
     def has_add_permission(self, request: HttpRequest) -> bool:
         return False
 
-    def has_change_permission(self, request: HttpRequest, {self.model_name_lower}: Optional[{self.model_name_capital}] = None) -> bool:
+    def has_change_permission(self, request: HttpRequest, {self.model_name_lower}: Optional[{model_name}] = None) -> bool:
         return False
 
-    def has_delete_permission(self, request: HttpRequest, {self.model_name_lower}: Optional[{self.model_name_capital}] = None) -> bool:
+    def has_delete_permission(self, request: HttpRequest, {self.model_name_lower}: Optional[{model_name}] = None) -> bool:
         return False
 
-    def get_field_rules(self, request: HttpRequest, {self.model_name_lower}: Optional[{self.model_name_capital}] = None) -> Dict:
-        context = {self.model_name_capital}ContextLogic(request, {self.model_name_lower})
+    def get_field_rules(self, request: HttpRequest, {self.model_name_lower}: Optional[{model_name}] = None) -> Dict:
+        context = {model_name}ContextLogic(request, {self.model_name_lower})
 
         return {{
 """ + ',\n'.join(field_rules) + """

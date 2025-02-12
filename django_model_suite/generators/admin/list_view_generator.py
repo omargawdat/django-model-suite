@@ -1,9 +1,10 @@
+# list_view_generator.py
 from ..base import BaseGenerator
-
 
 class ListViewGenerator(BaseGenerator):
     def generate(self, fields: list) -> None:
-        content = f'''class {self.model_name_capital}ListView:
+        model_name = self.model.__name__
+        content = f'''class {model_name}ListView:
     list_display =  ("display_header",)
     list_editable = ()
     list_filter = ()

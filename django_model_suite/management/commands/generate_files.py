@@ -137,8 +137,10 @@ class Command(BaseCommand):
         base_path = os.path.join(app_path, path_template)
         self.stdout.write(f"Generating {component} in {base_path}")
 
+        model_class = apps.get_model(app_name, model_name)
+
         generators = [
-            generator_class(app_name, model_name, base_path)
+            generator_class(app_name, model_name, base_path, model_class)
             for generator_class in config["generators"]
         ]
 
