@@ -8,3 +8,4 @@ class TestModel(models.Model):
 class TestModelRelated(models.Model):
     test_model = models.ForeignKey(TestModel, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
+
