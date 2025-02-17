@@ -126,3 +126,9 @@ your_app/
 You can then import and integrate these files as needed in your Django project.
 
 ---
+
+## Next Features
+
+- **Inline Template**: Inline should be use the field permissions.
+- **Field Permissions**: Should include users, show_in_creating, other_conditions
+- 
