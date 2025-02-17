@@ -119,11 +119,6 @@ class BaseModelAdmin(
 
     empty_value_display = "-"
     show_facets = admin.ShowFacets.ALWAYS
-    formfield_overrides = {
-        models.TextField: {
-            "widget": WysiwygWidget,
-        },
-    }
     compressed_fields = True
     warn_unsaved_form = True
 
