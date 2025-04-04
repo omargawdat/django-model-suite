@@ -99,7 +99,6 @@ class DynamicAdminFields(ABC):
         return super().changelist_view(request, extra_context=extra_context)
 
 
-
 class BaseModelAdminMeta(ModelAdmin.__class__, ABCMeta):
     pass
 
@@ -115,37 +114,60 @@ class BaseModelAdmin(
         self.filter_horizontal = [field.name for field in model._meta.many_to_many]
 
     empty_value_display = "-"
-    # show_facets = admin.ShowFacets.ALWAYS
     compressed_fields = True
     warn_unsaved_form = True
 
     @abstractmethod
+    def _has_custom_add_permission(self, request):
+        pass
+
+    @abstractmethod
+    def _has_custom_change_permission(self, request, obj=None):
+        pass
+
+    @abstractmethod
+    def _has_custom_delete_permission(self, request, obj=None):
+        pass
+
     def has_add_permission(self, request):
-        pass
+        return self._has_custom_add_permission(request)
 
-    @abstractmethod
     def has_change_permission(self, request, obj=None):
-        pass
+        return self._has_custom_change_permission(request, obj)
 
-    @abstractmethod
     def has_delete_permission(self, request, obj=None):
-        pass
+        return self._has_custom_delete_permission(request, obj)
 
 
 class BaseInlineMixin(DynamicAdminFields, ABC):
-    """
-    Base mixin for all inline admin classes.
-    
-    This class provides common functionality for both BaseTabularInline and BaseStackedInline.
-    """
     extra = 1
     show_change_link = True
-    can_delete = False
 
     def __init__(self, parent_model, admin_site):
         super().__init__(parent_model, admin_site)
         if hasattr(self.model, '_meta') and hasattr(self.model._meta, 'many_to_many'):
             self.filter_horizontal = [field.name for field in self.model._meta.many_to_many]
+
+    @abstractmethod
+    def _has_custom_add_permission(self, request, obj=None):
+        pass
+
+    @abstractmethod
+    def _has_custom_change_permission(self, request, obj=None):
+        pass
+
+    @abstractmethod
+    def _has_custom_delete_permission(self, request, obj=None):
+        pass
+
+    def has_add_permission(self, request, obj=None):
+        return self._has_custom_add_permission(request, obj)
+
+    def has_change_permission(self, request, obj=None):
+        return self._has_custom_change_permission(request, obj)
+
+    def has_delete_permission(self, request, obj=None):
+        return self._has_custom_delete_permission(request, obj)
 
 
 class BaseTabularInlineMeta(TabularInline.__class__, ABCMeta):
@@ -153,13 +175,6 @@ class BaseTabularInlineMeta(TabularInline.__class__, ABCMeta):
 
 
 class BaseTabularInline(BaseInlineMixin, TabularInline, metaclass=BaseTabularInlineMeta):
-    """
-    Base class for all tabular inline admin classes.
-    
-    Example:
-        class MyTabularInline(BaseTabularInline):
-            model = MyModel
-    """
     pass
 
 
@@ -168,11 +183,4 @@ class BaseStackedInlineMeta(StackedInline.__class__, ABCMeta):
 
 
 class BaseStackedInline(BaseInlineMixin, StackedInline, metaclass=BaseStackedInlineMeta):
-    """
-    Base class for all stacked inline admin classes.
-    
-    Example:
-        class MyStackedInline(BaseStackedInline):
-            model = MyModel
-    """
     pass

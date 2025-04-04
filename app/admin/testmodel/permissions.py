@@ -9,13 +9,13 @@ from ...fields.test_model import TestModelFields
 
 
 class TestModelPermissions:
-    def has_add_permission(self, request: HttpRequest) -> bool:
+    def _has_custom_add_permission(self, request, obj=None):
         return True
 
-    def has_change_permission(self, request: HttpRequest, test_model: Optional[TestModel] = None) -> bool:
+    def _has_custom_change_permission(self, request, obj=None):
         return True
 
-    def has_delete_permission(self, request: HttpRequest, test_model: Optional[TestModel] = None) -> bool:
+    def _has_custom_delete_permission(self, request, obj=None):
         return True
 
     def get_field_rules(self, request: HttpRequest, test_model: Optional[TestModel] = None) -> Dict:
