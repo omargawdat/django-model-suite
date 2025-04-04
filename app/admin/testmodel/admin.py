@@ -10,6 +10,7 @@ from .display import TestModelDisplayMixin
 from .list_view import TestModelListView
 from .permissions import TestModelPermissions
 from .resource import TestModelResource
+from ..testmodelrelated.inline import TestModelRelatedInline
 
 
 @admin.register(TestModel)
@@ -24,4 +25,4 @@ class TestModelAdmin(
     resource_class = TestModelResource
     export_form_class = ExportForm
     formats = [CSV]
-    inlines = []
+    inlines = [TestModelRelatedInline]
