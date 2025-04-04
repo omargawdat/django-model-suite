@@ -147,17 +147,6 @@ class BaseInlineMixin(DynamicAdminFields, ABC):
         if hasattr(self.model, '_meta') and hasattr(self.model._meta, 'many_to_many'):
             self.filter_horizontal = [field.name for field in self.model._meta.many_to_many]
 
-    def get_field_rules(self, request, obj=None) -> dict[str, FieldPermissions]:
-        """Default implementation that can be overridden by child classes"""
-        return {field.name: FieldPermissions(visible=True, editable=True)
-                for field in self.model._meta.fields
-                if not field.name.startswith('_')}
-
-    def has_add_permission(self, request, obj=None):
-        return False
-
-    def has_change_permission(self, request, obj=None):
-        return False
 
 class BaseTabularInlineMeta(TabularInline.__class__, ABCMeta):
     pass

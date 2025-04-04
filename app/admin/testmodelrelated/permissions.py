@@ -61,6 +61,7 @@ class TestModelRelatedPermissions:
             ),
             TestModelRelatedFields.NEW_FILED: FieldPermissions(
                 visible=(
+                    context.is_superuser
                 ),
                 editable=(
                 ),
