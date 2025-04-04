@@ -43,6 +43,7 @@ class TestModelRelatedPermissions:
             ),
             TestModelRelatedFields.IS_ACTIVE: FieldPermissions(
                 visible=(
+                    context.is_superuser
                 ),
                 editable=(
                 ),

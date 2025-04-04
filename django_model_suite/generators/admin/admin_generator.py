@@ -12,10 +12,12 @@ class AdminGenerator(BaseGenerator):
         base_model_admin_path = getattr(settings, 'BASE_MODEL_ADMIN_PATH')
         
         content = f'''from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
 from .list_view import {model_name}ListView
 from .change_view import {model_name}ChangeView
 from .permissions import {model_name}Permissions
 from .display import {model_name}DisplayMixin
+from .resource import {model_name}Resource
 from {model_import_path} import {model_name}
 from {base_model_admin_path} import BaseModelAdmin
 
@@ -25,8 +27,9 @@ class {model_name}Admin(
     {model_name}ListView,
     {model_name}ChangeView,
     {model_name}Permissions,
+    ImportExportModelAdmin,
     BaseModelAdmin,
 ):
-    pass
+    resource_class = {model_name}Resource
 '''
         self.write_file('admin.py', content)

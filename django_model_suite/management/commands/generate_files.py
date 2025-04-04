@@ -9,6 +9,7 @@ from django_model_suite.generators.admin.context_generator import ContextGenerat
 from django_model_suite.generators.admin.display_generator import DisplayGenerator
 from django_model_suite.generators.admin.list_view_generator import ListViewGenerator
 from django_model_suite.generators.admin.permissions_generator import PermissionsGenerator
+from django_model_suite.generators.admin.resource_generator import ResourceGenerator
 from django_model_suite.generators.api.filter_generator import FilterGenerator
 from django_model_suite.generators.api.pagination_generator import PaginationGenerator
 from django_model_suite.generators.api.serializer_generator import SerializerGenerator
@@ -37,6 +38,7 @@ class Command(BaseCommand):
                 PermissionsGenerator,
                 ContextGenerator,
                 DisplayGenerator,
+                ResourceGenerator,
                 AdminGenerator,
             ],
         },
