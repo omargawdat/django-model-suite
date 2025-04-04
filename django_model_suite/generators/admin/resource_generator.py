@@ -15,6 +15,6 @@ from {model_import_path} import {model_name}
 class {model_name}Resource(resources.ModelResource):
     class Meta:
         model = {model_name}
-        fields = {repr(fields)}
+        fields = []
 '''
         self.write_file('resource.py', content)
