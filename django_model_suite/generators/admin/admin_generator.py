@@ -1,5 +1,4 @@
 from django.conf import settings
-import os.path
 
 from ..base import BaseGenerator
 
@@ -15,17 +14,12 @@ class AdminGenerator(BaseGenerator):
         """
         model_name = self.model.__name__
         model_import_path = f"{self.model.__module__}"
-
-        # Get BaseModelAdmin import path from settings or use default
         base_model_admin_path = getattr(settings, 'BASE_MODEL_ADMIN_PATH')
         
-        # Check if inline file exists to potentially import it
-        inline_import = ""
-        if has_inline or os.path.exists(os.path.join(self.base_path, 'inline.py')):
-            inline_import = f"from .inline import {model_name}Inline"
-        
         content = f'''from django.contrib import admin
-from import_export.admin import ImportExportModelAdmin
+from import_export.admin import ExportActionModelAdmin
+from import_export.formats.base_formats import CSV
+from unfold.contrib.import_export.forms import ExportForm
 from .list_view import {model_name}ListView
 from .change_view import {model_name}ChangeView
 from .permissions import {model_name}Permissions
@@ -33,7 +27,6 @@ from .display import {model_name}DisplayMixin
 from .resource import {model_name}Resource
 from {model_import_path} import {model_name}
 from {base_model_admin_path} import BaseModelAdmin
-{inline_import}
 
 @admin.register({model_name})
 class {model_name}Admin(
@@ -41,11 +34,12 @@ class {model_name}Admin(
     {model_name}ListView,
     {model_name}ChangeView,
     {model_name}Permissions,
-    ImportExportModelAdmin,
+    ExportActionModelAdmin,
     BaseModelAdmin,
 ):
     resource_class = {model_name}Resource
-    
-    {f"inlines = [{model_name}Inline]" if has_inline or inline_import else ""}
+    export_form_class = ExportForm
+    formats = [CSV]
+    inlines = []
 '''
         self.write_file('admin.py', content)

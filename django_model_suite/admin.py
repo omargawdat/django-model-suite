@@ -116,7 +116,7 @@ class BaseModelAdmin(
         self.filter_horizontal = [field.name for field in model._meta.many_to_many]
 
     empty_value_display = "-"
-    show_facets = admin.ShowFacets.ALWAYS
+    # show_facets = admin.ShowFacets.ALWAYS
     compressed_fields = True
     warn_unsaved_form = True
 

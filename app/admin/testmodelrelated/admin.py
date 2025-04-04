@@ -1,12 +1,15 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
-from .list_view import TestModelRelatedListView
-from .change_view import TestModelRelatedChangeView
-from .permissions import TestModelRelatedPermissions
-from .display import TestModelRelatedDisplayMixin
-from .resource import TestModelRelatedResource
+
 from app.models import TestModelRelated
 from django_model_suite.admin import BaseModelAdmin
+from .change_view import TestModelRelatedChangeView
+from .display import TestModelRelatedDisplayMixin
+from .inline import TestModelRelatedInline
+from .list_view import TestModelRelatedListView
+from .permissions import TestModelRelatedPermissions
+from .resource import TestModelRelatedResource
+
 
 @admin.register(TestModelRelated)
 class TestModelRelatedAdmin(
@@ -14,7 +17,9 @@ class TestModelRelatedAdmin(
     TestModelRelatedListView,
     TestModelRelatedChangeView,
     TestModelRelatedPermissions,
-    ImportExportModelAdmin,
+    # ImportExportModelAdmin,
     BaseModelAdmin,
 ):
-    resource_class = TestModelRelatedResource
+    # resource_class = TestModelRelatedResource
+
+    inlines = []

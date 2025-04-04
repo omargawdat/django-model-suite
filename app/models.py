@@ -13,7 +13,3 @@ class TestModelRelated(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     new_filed = models.CharField(max_length=100, default="default_value")
 
-class UnRelatedModel(models.Model):
-    name = models.CharField(max_length=100)
-    test_model = models.ForeignKey(TestModel, on_delete=models.CASCADE)
-    test_model_related = models.ForeignKey(TestModelRelated, on_delete=models.CASCADE)
