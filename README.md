@@ -1,142 +1,153 @@
-# Django Model Suite File Generator
+# Django Model Suite
 
-This project provides a custom Django management command that automatically generates boilerplate files for a specified
-model within a Django application. It creates admin configurations (list view, change view, permissions, context,
-displays), API files (serializers, views, URLs, filters, pagination), domain files (selectors, services, validators),
-and field definitions—all tailored for the given model.
+[![PyPI version](https://badge.fury.io/py/django-model-suite.svg)](https://badge.fury.io/py/django-model-suite)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Table of Contents
+A comprehensive Django package that automatically generates standardized boilerplate code for your Django models following domain-driven design principles and best practices.
 
-1. [Features](#features)
-2. [Installation](#installation)
-3. [Usage](#usage)
-4. [How It Works](#how-it-works)
-5. [File Structure](#file-structure)
-6. [Contributing](#contributing)
-7. [License](#license)
+## Overview
 
----
+Django Model Suite eliminates repetitive coding tasks by generating a complete suite of files for each model in your Django application. With a single command, you can create a fully-functional architecture including:
+
+- **Admin Interface**: List views, change views, permissions, context providers, display configurations, and resources
+- **REST API**: Serializers, views, URL configurations, filters, and pagination
+- **Domain Logic**: Selectors, services, and validators
+- **Field Definitions**: Clean field organization and management
 
 ## Features
 
-- **Automated file generation**: With a single command, generate all necessary boilerplate files for a model.
-- **Extensible**: Easily add or modify generators to customize the files you want to create.
-- **Organized output**: Automatically places generated files in logical paths under your app (e.g., `admin/<model>/`,
-  `api/<model>/`, `domain/selectors/`, etc.).
-
----
+- **One Command, Many Files**: Generate dozens of boilerplate files with a single command
+- **Best Practices Baked In**: Follow domain-driven design and architectural best practices automatically
+- **DRF Integration**: Complete REST API scaffolding with Django Rest Framework
+- **Django Unfold Support**: Built-in support for the modern Django Unfold admin theme
+- **Customizable**: Generate only the components you need
+- **Clean Architecture**: Promotes separation of concerns and maintainable code structure
+- **Time-Saving**: Eliminate hours of repetitive coding for each model
 
 ## Installation
 
-1. install the package
-
-```aiignore
+```bash
 pip install django-model-suite
 ```
 
-2. **Add to `INSTALLED_APPS`**: Make sure the app containing this management command (and the `django_model_suite` if
-   it's a separate app) is listed in your `INSTALLED_APPS` in `settings.py`:
+Then add it to your `INSTALLED_APPS` in `settings.py`:
 
-   ```python
-   INSTALLED_APPS = [
-       # ...
-    "unfold.contrib.filters",  # optional, if special filters are needed
-    "unfold.contrib.forms",  # optional, if special form elements are needed
-    "unfold.contrib.inlines",  # optional, if special inlines are needed
-    "unfold.contrib.import_export",  # optional, if django-import-export package is used
-    "unfold.contrib.guardian",  # optional, if django-guardian package is used
-    "unfold.contrib.simple_history",  # optional, if django-simple-history package is used
-    "django.contrib.admin",  # required
+```python
+INSTALLED_APPS = [
+    # ...
     'django_model_suite',
-       # ...
-   ]
-   ```
+    # ...
+]
+```
 
-3. **Optional Configuration**: You can customize the following settings in your `settings.py`:
+## Requirements
 
-   ```python
-   # Custom path for BaseModelAdmin (default: 'django_model_suite.admin')
-   BASE_MODEL_ADMIN_PATH = 'your_app.admin'
-   ```
-
----
+- Python 3.8+
+- Django 5.0+
+- Django Unfold 0.45.0+
+- Django Rest Framework 3.14.0+
+- Django Filter 23.0+
 
 ## Usage
 
-1. **Run the command** to generate files for a specific model
+### Basic Usage
 
-   ```bash
-    python manage.py generate_files <app_name> <model_name> --components admin domain api
-    ```
-   example: 
-   ```bash
-    python manage.py generate_files users customer
-    ```
+Generate all components for a model with a single command:
 
----
-
-## How It Works
-
-The command uses several generator classes (e.g., `FieldsGenerator`, `ListViewGenerator`, `SerializerGenerator`, etc.)
-each responsible for creating a specific part of the Django scaffolding. Once you call:
-
+```bash
 python manage.py generate_files <app_name> <model_name>
+```
 
-The command:
+Example:
 
-1. **Resolves the app path** based on the `app_name` provided.
-2. **Retrieves the list of fields** for the specified `model_name`.
-3. **Iterates over a predefined list of components** (e.g., `fields`, `admin`, `api`, `selectors`, `services`,
-   `validators`).
-4. **Generates boilerplate files** in each of these sections by calling the respective generators with the model name,
-   app name, and field definitions.
+```bash
+python manage.py generate_files users customer
+```
 
----
+### Selective Generation
 
-## File Structure
+Generate only specific components:
 
-After running the command, you'll typically see the following structure in your app (depending on which components the
-script generates):
+```bash
+python manage.py generate_files <app_name> <model_name> --components admin api
+```
+
+Available component groups:
+- `admin`: Admin interface files
+- `domain`: Domain logic files (selectors, services, validators)
+- `api`: REST API files
+
+You can also specify individual components:
+- `fields`: Field definitions
+- `selectors`: Query selectors
+- `services`: Business logic services
+- `validators`: Data validation
+
+### Configuration
+
+Customize the package behavior in your project's `settings.py`:
+
+```python
+# Custom path for BaseModelAdmin (default: 'django_model_suite.admin')
+BASE_MODEL_ADMIN_PATH = 'your_app.admin'
+```
+
+## Generated Structure
+
+After running the command, your app will have the following structure:
 
 ```
 your_app/
 │
 ├─ fields/
-│   └─ fields_<model_name>.py               (Generated fields definitions)
+│   └─ <model_name>.py                 # Field definitions
 │
 ├─ admin/
 │   └─ <model_name>/
-│       ├─ list_view_<model_name>.py        (List view for model in Django admin)
-│       ├─ change_view_<model_name>.py      (Change view for model in Django admin)
-│       ├─ permissions_<model_name>.py      (Permissions handling in admin)
-│       ├─ context_<model_name>.py          (Context data for admin templates)
-│       ├─ display_<model_name>.py          (Display logic for admin list/change)
-│       └─ admin_<model_name>.py            (Main Admin registration)
+│       ├─ __init__.py                 # Package initialization
+│       ├─ admin.py                    # Main Admin registration
+│       ├─ change_view.py              # Change view configuration
+│       ├─ context.py                  # Context data providers
+│       ├─ display.py                  # Display configuration
+│       ├─ inline.py                   # Inline model configuration
+│       ├─ list_view.py                # List view configuration
+│       ├─ permissions.py              # Permission handling
+│       └─ resource.py                 # Resource configuration
 │
 ├─ api/
 │   └─ <model_name>/
-│       ├─ serializer_<model_name>.py       (Django Rest Framework serializer)
-│       ├─ view_<model_name>.py             (ViewSets or API views)
-│       ├─ url_<model_name>.py              (API URL configurations)
-│       ├─ filter_<model_name>.py           (Filter classes for the model API)
-│       └─ pagination_<model_name>.py       (Pagination settings for the model API)
+│       ├─ __init__.py                 # Package initialization
+│       ├─ filters.py                  # API filtering options
+│       ├─ pagination.py               # Custom pagination settings
+│       ├─ serializers.py              # DRF serializers
+│       ├─ urls.py                     # API URL routing
+│       └─ views.py                    # API views and viewsets
 │
 └─ domain/
     ├─ selectors/
-    │   └─ selector_<model_name>.py          (Query logic)
+    │   └─ <model_name>.py             # Query logic
     ├─ services/
-    │   └─ service_<model_name>.py           (Business logic services)
+    │   └─ <model_name>.py             # Business logic
     └─ validators/
-        └─ validator_<model_name>.py         (Validation logic)
+        └─ <model_name>.py             # Validation logic
 ```
 
-You can then import and integrate these files as needed in your Django project.
+## Benefits
 
----
+- **Consistency**: Maintain a consistent code structure across your entire project
+- **Productivity**: Focus on business logic rather than boilerplate code
+- **Maintainability**: Cleanly organized code following best practices
+- **Scalability**: Architecture designed to support project growth
+- **Onboarding**: Easier onboarding for new developers with consistent patterns
 
-## Next Features
+## Contributing
 
-- **Inline Template**: Inline should be use the field permissions.
-- **Field Permissions**: Should include users, show_in_creating, other_conditions
-- **Custom BaseModelAdmin Path**: Configure the import path for BaseModelAdmin in your settings.
-- 
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Author
+
+Omar Gawdat - [GitHub](https://github.com/omargawdat)

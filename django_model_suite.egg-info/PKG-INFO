@@ -1,6 +1,6 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: django_model_suite
-Version: 0.1.16
+Version: 0.1.17
 Summary: A Django app for generating boilerplate code
 Home-page: https://github.com/omargawdat/django-model-suite
 Author: Omar Gawdat
@@ -20,6 +20,15 @@ Requires-Dist: Django>=5.0
 Requires-Dist: django-unfold>=0.45.0
 Requires-Dist: djangorestframework>=3.14.0
 Requires-Dist: django-filter>=23.0
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 # Django Model Suite File Generator
 
