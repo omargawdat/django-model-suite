@@ -7,6 +7,7 @@ from django_model_suite.generators.admin.admin_generator import AdminGenerator
 from django_model_suite.generators.admin.change_view_generator import ChangeViewGenerator
 from django_model_suite.generators.admin.context_generator import ContextGenerator
 from django_model_suite.generators.admin.display_generator import DisplayGenerator
+from django_model_suite.generators.admin.inline import InlineAdminGenerator
 from django_model_suite.generators.admin.list_view_generator import ListViewGenerator
 from django_model_suite.generators.admin.permissions_generator import PermissionsGenerator
 from django_model_suite.generators.admin.resource_generator import ResourceGenerator
@@ -39,6 +40,7 @@ class Command(BaseCommand):
                 ContextGenerator,
                 DisplayGenerator,
                 ResourceGenerator,
+                InlineAdminGenerator,
                 AdminGenerator,
             ],
         },
@@ -117,7 +119,7 @@ class Command(BaseCommand):
                 config = self.COMPONENT_CONFIGS.get(component)
                 if config:
                     self._generate_component(
-                        app_path, app_name, model_name, component, config, fields
+                        app_path, app_name, model_name, component, config, fields, options
                     )
 
             self.stdout.write(
@@ -134,6 +136,7 @@ class Command(BaseCommand):
             component: str,
             config: dict,
             fields: list,
+            options: dict,
     ) -> None:
         path_template = config["path_template"].format(model=model_name.lower())
         base_path = os.path.join(app_path, path_template)
@@ -141,10 +144,21 @@ class Command(BaseCommand):
 
         model_class = apps.get_model(app_name, model_name)
 
+        # Generate admin classes
         generators = [
             generator_class(app_name, model_name, base_path, model_class)
             for generator_class in config["generators"]
         ]
 
+        # Track if inline was generated to update admin generator
+        has_generated_inline = False
+        
         for generator in generators:
-            generator.generate(fields)
+            if isinstance(generator, InlineAdminGenerator):
+                generator.generate(fields=fields)
+                has_generated_inline = True
+            elif isinstance(generator, AdminGenerator) and has_generated_inline:
+                # If inline was generated, tell admin generator to include it
+                generator.generate(fields=fields, has_inline=True)
+            else:
+                generator.generate(fields)

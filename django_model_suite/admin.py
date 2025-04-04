@@ -6,9 +6,7 @@ from typing import Union
 
 from django.contrib import admin
 from django.contrib.admin.options import ModelAdmin
-from django.db import models
-from unfold.admin import ModelAdmin as UnfoldModelAdmin
-from unfold.contrib.forms.widgets import WysiwygWidget
+from unfold.admin import ModelAdmin as UnfoldModelAdmin, StackedInline, TabularInline
 
 
 @dataclass
@@ -133,3 +131,60 @@ class BaseModelAdmin(
     @abstractmethod
     def has_delete_permission(self, request, obj=None):
         pass
+
+
+class BaseInlineMixin(DynamicAdminFields, ABC):
+    """
+    Base mixin for all inline admin classes.
+    
+    This class provides common functionality for both BaseTabularInline and BaseStackedInline.
+    """
+    extra = 1
+    show_change_link = True
+    can_delete = False
+
+    def __init__(self, parent_model, admin_site):
+        super().__init__(parent_model, admin_site)
+        if hasattr(self.model, '_meta') and hasattr(self.model._meta, 'many_to_many'):
+            self.filter_horizontal = [field.name for field in self.model._meta.many_to_many]
+
+    def get_field_rules(self, request, obj=None) -> dict[str, FieldPermissions]:
+        """Default implementation that can be overridden by child classes"""
+        return {field.name: FieldPermissions(visible=True, editable=True)
+                for field in self.model._meta.fields
+                if not field.name.startswith('_')}
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+class BaseTabularInlineMeta(TabularInline.__class__, ABCMeta):
+    pass
+
+
+class BaseTabularInline(BaseInlineMixin, admin.TabularInline, metaclass=BaseTabularInlineMeta):
+    """
+    Base class for all tabular inline admin classes.
+    
+    Example:
+        class MyTabularInline(BaseTabularInline):
+            model = MyModel
+    """
+    pass
+
+
+class BaseStackedInlineMeta(StackedInline.__class__, ABCMeta):
+    pass
+
+
+class BaseStackedInline(BaseInlineMixin, admin.StackedInline, metaclass=BaseStackedInlineMeta):
+    """
+    Base class for all stacked inline admin classes.
+    
+    Example:
+        class MyStackedInline(BaseStackedInline):
+            model = MyModel
+    """
+    pass
