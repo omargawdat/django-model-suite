@@ -12,8 +12,13 @@ app/apps.py
 app/models.py
 app/tests.py
 app/views.py
+app/fields/__init__.py
+app/fields/test_model_related.py
 app/migrations/0001_initial.py
 app/migrations/0002_unrelatedmodel.py
+app/migrations/0003_testmodelrelated_description_and_more.py
+app/migrations/0004_testmodelrelated_created_at.py
+app/migrations/0005_testmodelrelated_new_filed.py
 app/migrations/__init__.py
 django_model_suite/__init__.py
 django_model_suite/admin.py
@@ -31,6 +36,7 @@ django_model_suite/generators/admin/admin_generator.py
 django_model_suite/generators/admin/change_view_generator.py
 django_model_suite/generators/admin/context_generator.py
 django_model_suite/generators/admin/display_generator.py
+django_model_suite/generators/admin/inline.py
 django_model_suite/generators/admin/list_view_generator.py
 django_model_suite/generators/admin/permissions_generator.py
 django_model_suite/generators/api/__init__.py
