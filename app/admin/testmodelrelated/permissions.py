@@ -33,5 +33,32 @@ class TestModelRelatedPermissions:
                 ),
                 editable=(
                 ),
+            ),
+            TestModelRelatedFields.DESCRIPTION: FieldPermissions(
+                visible=(
+                    context.is_superuser
+                ),
+                editable=(
+                ),
+            ),
+            TestModelRelatedFields.IS_ACTIVE: FieldPermissions(
+                visible=(
+                ),
+                editable=(
+                ),
+            ),
+            TestModelRelatedFields.CREATED_AT: FieldPermissions(
+                visible=(
+                    context.is_superuser
+                ),
+                editable=(
+                ),
+            ),
+            TestModelRelatedFields.NEW_FILED: FieldPermissions(
+                visible=(
+                    context.is_superuser
+                ),
+                editable=(
+                ),
             )
         }
