@@ -35,7 +35,7 @@ pip install django-model-suite
 ```
 
 2. **Add to `INSTALLED_APPS`**: Make sure the app containing this management command (and the `django_model_suite` if
-   it’s a separate app) is listed in your `INSTALLED_APPS` in `settings.py`:
+   it's a separate app) is listed in your `INSTALLED_APPS` in `settings.py`:
 
    ```python
    INSTALLED_APPS = [
@@ -50,6 +50,13 @@ pip install django-model-suite
     'django_model_suite',
        # ...
    ]
+   ```
+
+3. **Optional Configuration**: You can customize the following settings in your `settings.py`:
+
+   ```python
+   # Custom path for BaseModelAdmin (default: 'django_model_suite.admin')
+   BASE_MODEL_ADMIN_PATH = 'your_app.admin'
    ```
 
 ---
@@ -88,7 +95,7 @@ The command:
 
 ## File Structure
 
-After running the command, you’ll typically see the following structure in your app (depending on which components the
+After running the command, you'll typically see the following structure in your app (depending on which components the
 script generates):
 
 ```
@@ -131,4 +138,5 @@ You can then import and integrate these files as needed in your Django project.
 
 - **Inline Template**: Inline should be use the field permissions.
 - **Field Permissions**: Should include users, show_in_creating, other_conditions
+- **Custom BaseModelAdmin Path**: Configure the import path for BaseModelAdmin in your settings.
 - 
