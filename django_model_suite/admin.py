@@ -4,7 +4,7 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from typing import Union
 
-from django.contrib.admin.options import ModelAdmin
+from django.contrib.admin.options import ModelAdmin, ShowFacets
 from unfold.admin import ModelAdmin as UnfoldModelAdmin, StackedInline, TabularInline
 
 
@@ -116,6 +116,7 @@ class BaseModelAdmin(
     empty_value_display = "-"
     compressed_fields = True
     warn_unsaved_form = True
+    show_facets = ShowFacets.ALWAYS
 
     @abstractmethod
     def can_add(self, request):

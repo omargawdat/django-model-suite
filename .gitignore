@@ -1,0 +1,5 @@
+/.venv2/
+.venv
+
+# ignore all __pycache__ folders in any path
+__pycache__/
