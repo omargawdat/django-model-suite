@@ -27,13 +27,13 @@ from .context import {model_name}ContextLogic
 
 
 class {model_name}Permissions:
-    def has_add_permission(self, request: HttpRequest) -> bool:
+    def can_add(self, request, obj=None):
         return False
 
-    def has_change_permission(self, request: HttpRequest, {self.model_name_lower}: Optional[{model_name}] = None) -> bool:
+    def can_change(self, request, obj=None):
         return False
 
-    def has_delete_permission(self, request: HttpRequest, {self.model_name_lower}: Optional[{model_name}] = None) -> bool:
+    def can_delete(self, request, obj=None):
         return False
 
     def get_field_rules(self, request: HttpRequest, {self.model_name_lower}: Optional[{model_name}] = None) -> Dict:

@@ -118,25 +118,25 @@ class BaseModelAdmin(
     warn_unsaved_form = True
 
     @abstractmethod
-    def _has_custom_add_permission(self, request):
+    def can_add(self, request):
         pass
 
     @abstractmethod
-    def _has_custom_change_permission(self, request, obj=None):
+    def can_change(self, request, obj=None):
         pass
 
     @abstractmethod
-    def _has_custom_delete_permission(self, request, obj=None):
+    def can_delete(self, request, obj=None):
         pass
 
     def has_add_permission(self, request):
-        return self._has_custom_add_permission(request)
+        return self.can_add(request)
 
     def has_change_permission(self, request, obj=None):
-        return self._has_custom_change_permission(request, obj)
+        return self.can_change(request, obj)
 
     def has_delete_permission(self, request, obj=None):
-        return self._has_custom_delete_permission(request, obj)
+        return self.can_delete(request, obj)
 
 
 class BaseInlineMixin(DynamicAdminFields, ABC):
@@ -149,25 +149,25 @@ class BaseInlineMixin(DynamicAdminFields, ABC):
             self.filter_horizontal = [field.name for field in self.model._meta.many_to_many]
 
     @abstractmethod
-    def _has_custom_add_permission(self, request, obj=None):
+    def can_add(self, request, obj=None):
         pass
 
     @abstractmethod
-    def _has_custom_change_permission(self, request, obj=None):
+    def can_change(self, request, obj=None):
         pass
 
     @abstractmethod
-    def _has_custom_delete_permission(self, request, obj=None):
+    def can_delete(self, request, obj=None):
         pass
 
     def has_add_permission(self, request, obj=None):
-        return self._has_custom_add_permission(request, obj)
+        return self.can_add(request, obj)
 
     def has_change_permission(self, request, obj=None):
-        return self._has_custom_change_permission(request, obj)
+        return self.can_change(request, obj)
 
     def has_delete_permission(self, request, obj=None):
-        return self._has_custom_delete_permission(request, obj)
+        return self.can_delete(request, obj)
 
 
 class BaseTabularInlineMeta(TabularInline.__class__, ABCMeta):

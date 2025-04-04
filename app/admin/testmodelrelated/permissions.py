@@ -9,13 +9,13 @@ from ...fields.test_model_related import TestModelRelatedFields
 
 
 class TestModelRelatedPermissions:
-    def _has_custom_add_permission(self, request, obj=None):
+    def can_add(self, request, obj=None):
         return True
 
-    def _has_custom_change_permission(self, request, obj=None):
+    def can_change(self, request, obj=None):
         return True
 
-    def _has_custom_delete_permission(self, request, obj=None):
+    def can_delete(self, request, obj=None):
         return False
 
 

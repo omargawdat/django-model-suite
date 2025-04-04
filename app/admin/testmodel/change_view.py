@@ -3,5 +3,5 @@ class TestModelChangeView:
     compressed_fields = True
     autocomplete_fields = ()
     fieldsets = (
-        ("Information", {"fields": ("name",)}),
+        ("Information", {"fields": ()}),
     )

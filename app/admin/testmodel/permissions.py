@@ -1,22 +1,20 @@
 from typing import Optional, Dict
-
 from django.http import HttpRequest
-
-from app.models import TestModel
-from django_model_suite.admin import FieldPermissions
-from .context import TestModelContextLogic
 from ...fields.test_model import TestModelFields
+from django_model_suite.admin import FieldPermissions
+from app.models import TestModel
+from .context import TestModelContextLogic
 
 
 class TestModelPermissions:
-    def _has_custom_add_permission(self, request, obj=None):
-        return True
+    def can_add(self, request, obj=None):
+        return False
 
-    def _has_custom_change_permission(self, request, obj=None):
-        return True
+    def can_change(self, request, obj=None):
+        return False
 
-    def _has_custom_delete_permission(self, request, obj=None):
-        return True
+    def can_delete(self, request, obj=None):
+        return False
 
     def get_field_rules(self, request: HttpRequest, test_model: Optional[TestModel] = None) -> Dict:
         context = TestModelContextLogic(request, test_model)
@@ -27,8 +25,6 @@ class TestModelPermissions:
                     context.is_superuser
                 ),
                 editable=(
-                    context.is_superuser
-
                 ),
             )
         }
