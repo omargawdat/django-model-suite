@@ -3,3 +3,5 @@ django-unfold>=0.54.0
 djangorestframework>=3.16.0
 django-filter>=25.1
 django-import-export>= 4.3.7
+django-simple-history==3.8.0
+django-modeltranslation==0.19.11
