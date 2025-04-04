@@ -4,7 +4,6 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from typing import Union
 
-from django.contrib import admin
 from django.contrib.admin.options import ModelAdmin
 from unfold.admin import ModelAdmin as UnfoldModelAdmin, StackedInline, TabularInline
 
@@ -164,7 +163,7 @@ class BaseTabularInlineMeta(TabularInline.__class__, ABCMeta):
     pass
 
 
-class BaseTabularInline(BaseInlineMixin, admin.TabularInline, metaclass=BaseTabularInlineMeta):
+class BaseTabularInline(BaseInlineMixin, TabularInline, metaclass=BaseTabularInlineMeta):
     """
     Base class for all tabular inline admin classes.
     
@@ -179,7 +178,7 @@ class BaseStackedInlineMeta(StackedInline.__class__, ABCMeta):
     pass
 
 
-class BaseStackedInline(BaseInlineMixin, admin.StackedInline, metaclass=BaseStackedInlineMeta):
+class BaseStackedInline(BaseInlineMixin, StackedInline, metaclass=BaseStackedInlineMeta):
     """
     Base class for all stacked inline admin classes.
     

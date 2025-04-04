@@ -13,10 +13,10 @@ class TestModelPermissions:
         return True
 
     def has_change_permission(self, request: HttpRequest, test_model: Optional[TestModel] = None) -> bool:
-        return False
+        return True
 
     def has_delete_permission(self, request: HttpRequest, test_model: Optional[TestModel] = None) -> bool:
-        return False
+        return True
 
     def get_field_rules(self, request: HttpRequest, test_model: Optional[TestModel] = None) -> Dict:
         context = TestModelContextLogic(request, test_model)

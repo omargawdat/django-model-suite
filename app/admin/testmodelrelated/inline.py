@@ -1,21 +1,8 @@
+from app.admin.testmodelrelated.permissions import TestModelRelatedPermissions
 from app.models import TestModelRelated
-from django_model_suite.admin import BaseTabularInline, BaseStackedInline
+from django_model_suite.admin import BaseTabularInline
 
 
-class TestModelRelatedInline(BaseTabularInline):
-    """
-    Inline admin for TestModelRelated.
-    
-    For stacked inline, use BaseStackedInline instead:
-    class TestModelRelatedInline(BaseStackedInline):
-    """
+class TestModelRelatedInline(BaseTabularInline, TestModelRelatedPermissions):
     model = TestModelRelated
-    extra = 1
-    show_change_link = True
-    can_delete = False
-    view_on_site = False
-
-    # Fields configuration
-    fields = ()
-    readonly_fields = ()
-    autocomplete_fields = ()
+    fields = ['name', 'is_active']
