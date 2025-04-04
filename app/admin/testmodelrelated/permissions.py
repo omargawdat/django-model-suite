@@ -8,17 +8,7 @@ from .context import TestModelRelatedContextLogic
 from ...fields.test_model_related import TestModelRelatedFields
 
 
-class TestModelRelatedPermissions:
-    def can_add(self, request, obj=None):
-        return True
-
-    def can_change(self, request, obj=None):
-        return True
-
-    def can_delete(self, request, obj=None):
-        return False
-
-
+class BaseTestModelRelatedPermissions:
     def get_field_rules(self, request: HttpRequest, test_model_related: Optional[TestModelRelated] = None) -> Dict:
         context = TestModelRelatedContextLogic(request, test_model_related)
 
@@ -68,3 +58,25 @@ class TestModelRelatedPermissions:
                 ),
             )
         }
+
+
+class TestModelRelatedAdminPermissions(BaseTestModelRelatedPermissions):
+    def can_add(self, request, obj=None):
+        return True
+
+    def can_change(self, request, obj=None):
+        return True
+
+    def can_delete(self, request, obj=None):
+        return False
+
+
+class TestModelRelatedInlinePermissions(BaseTestModelRelatedPermissions):
+    def can_add(self, request, obj=None):
+        return True
+
+    def can_change(self, request, obj=None):
+        return True
+
+    def can_delete(self, request, obj=None):
+        return False

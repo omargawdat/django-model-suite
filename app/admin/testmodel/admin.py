@@ -8,7 +8,7 @@ from django_model_suite.admin import BaseModelAdmin
 from .change_view import TestModelChangeView
 from .display import TestModelDisplayMixin
 from .list_view import TestModelListView
-from .permissions import TestModelPermissions
+from .permissions import TestModelAdminPermissions
 from .resource import TestModelResource
 
 
@@ -17,7 +17,7 @@ class TestModelAdmin(
     TestModelDisplayMixin,
     TestModelListView,
     TestModelChangeView,
-    TestModelPermissions,
+    TestModelAdminPermissions,
     ExportActionModelAdmin,
     BaseModelAdmin,
 ):

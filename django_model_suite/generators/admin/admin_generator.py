@@ -22,7 +22,7 @@ from import_export.formats.base_formats import CSV
 from unfold.contrib.import_export.forms import ExportForm
 from .list_view import {model_name}ListView
 from .change_view import {model_name}ChangeView
-from .permissions import {model_name}Permissions
+from .permissions import {model_name}AdminPermissions
 from .display import {model_name}DisplayMixin
 from .resource import {model_name}Resource
 from {model_import_path} import {model_name}
@@ -33,7 +33,7 @@ class {model_name}Admin(
     {model_name}DisplayMixin,
     {model_name}ListView,
     {model_name}ChangeView,
-    {model_name}Permissions,
+    {model_name}AdminPermissions,
     ExportActionModelAdmin,
     BaseModelAdmin,
 ):

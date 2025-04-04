@@ -1,15 +1,11 @@
 from app.models import TestModel
-from django_model_suite.admin import BaseTabularInline, BaseStackedInline
+from django_model_suite.admin import BaseTabularInline
+from .permissions import TestModelInlinePermissions
 
 
-class TestModelInline(BaseTabularInline):
+class TestModelInline(TestModelInlinePermissions, BaseTabularInline):
     model = TestModel
-    extra = 1
+    extra = 0
     show_change_link = True
-    can_delete = False
-    view_on_site = False
-
-    # Fields configuration
     fields = ()
-    readonly_fields = ()
     autocomplete_fields = ()

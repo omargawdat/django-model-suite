@@ -18,15 +18,26 @@ class PermissionsGenerator(BaseGenerator):
             "            )" for field in fields
         ]
 
-        content = f"""from typing import Optional, Dict
+        imports = f"""from typing import Optional, Dict
 from django.http import HttpRequest
 from ...fields.{self.model_name_lower} import {model_name}Fields
 from django_model_suite.admin import FieldPermissions
 from {self.model.__module__} import {model_name}
 from .context import {model_name}ContextLogic
+"""
 
+        base_class = f"""
+class Base{model_name}Permissions:
+    def get_field_rules(self, request: HttpRequest, {self.model_name_lower}: Optional[{model_name}] = None) -> Dict:
+        context = {model_name}ContextLogic(request, {self.model_name_lower})
 
-class {model_name}Permissions:
+        return {{
+{',\\n'.join(field_rules)}
+        }}
+        """
+
+        admin_class = f"""
+class {model_name}AdminPermissions(Base{model_name}Permissions):
     def can_add(self, request, obj=None):
         return False
 
@@ -35,18 +46,39 @@ class {model_name}Permissions:
 
     def can_delete(self, request, obj=None):
         return False
-
-    def get_field_rules(self, request: HttpRequest, {self.model_name_lower}: Optional[{model_name}] = None) -> Dict:
-        context = {model_name}ContextLogic(request, {self.model_name_lower})
-
-        return {{
-""" + ',\n'.join(field_rules) + """
-        }
 """
+
+        inline_class = f"""
+class {model_name}InlinePermissions(Base{model_name}Permissions):
+    def can_add(self, request, obj=None):
+        return False
+
+    def can_change(self, request, obj=None):
+        return False
+
+    def can_delete(self, request, obj=None):
+        return False
+"""
+
+        content = imports + base_class + admin_class + inline_class
+
         def update_permissions(existing_content):
             """Update existing permissions file with any new fields."""
             # Skip if no existing content
             if not existing_content.strip():
+                return content
+                
+            # Check if file has the new structure with Base, Admin and Inline classes
+            base_pattern = f"class Base{model_name}Permissions"
+            admin_pattern = f"class {model_name}AdminPermissions"
+            inline_pattern = f"class {model_name}InlinePermissions"
+            
+            has_new_structure = base_pattern in existing_content and \
+                                admin_pattern in existing_content and \
+                                inline_pattern in existing_content
+            
+            # If doesn't have new structure, regenerate
+            if not has_new_structure:
                 return content
                 
             # Extract existing fields from the file
