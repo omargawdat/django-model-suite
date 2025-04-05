@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from typing import Union
 
 from django.contrib.admin.options import ModelAdmin, ShowFacets
-from modeltranslation.admin import TabbedTranslationAdmin
 from simple_history.admin import SimpleHistoryAdmin
 from unfold.admin import ModelAdmin as UnfoldModelAdmin, StackedInline, TabularInline
 
@@ -120,6 +119,11 @@ class BaseModelAdmin(
     compressed_fields = True
     warn_unsaved_form = True
     show_facets = ShowFacets.ALWAYS
+
+    def get_inlines(self, request, obj=None):
+        if obj is None:
+            return []
+        return super().get_inlines(request, obj)
 
     @abstractmethod
     def can_add(self, request):

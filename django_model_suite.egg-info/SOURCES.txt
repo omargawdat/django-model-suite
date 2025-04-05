@@ -15,11 +15,6 @@ app/fields/__init__.py
 app/fields/test_model.py
 app/fields/test_model_related.py
 app/migrations/0001_initial.py
-app/migrations/0002_unrelatedmodel.py
-app/migrations/0003_testmodelrelated_description_and_more.py
-app/migrations/0004_testmodelrelated_created_at.py
-app/migrations/0005_testmodelrelated_new_filed.py
-app/migrations/0006_delete_unrelatedmodel.py
 app/migrations/__init__.py
 django_model_suite/__init__.py
 django_model_suite/admin.py

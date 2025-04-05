@@ -21,6 +21,7 @@ class {model_name}Inline({model_name}InlinePermissions, BaseTabularInline):
     model = {model_name}
     extra = 0
     show_change_link = True
+    tab  = True
     fields = ()
     autocomplete_fields = ()
 '''
