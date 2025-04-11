@@ -37,7 +37,7 @@ class Command(BaseCommand):
                 ListViewGenerator,
                 ChangeViewGenerator,
                 PermissionsGenerator,
-                ContextGenerator,
+                # ContextGenerator,
                 DisplayGenerator,
                 ResourceGenerator,
                 InlineAdminGenerator,
