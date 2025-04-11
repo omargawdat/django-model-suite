@@ -3,6 +3,7 @@ import re
 from typing import List
 
 from ..base import BaseGenerator
+from django_model_suite.admin import AdminContextLogic
 
 
 class PermissionsGenerator(BaseGenerator):
@@ -11,7 +12,7 @@ class PermissionsGenerator(BaseGenerator):
         field_rules = [
             f"            {model_name}Fields.{field.upper()}: FieldPermissions(\n"
             "                visible=(\n"
-            "                    context.is_superuser\n"
+            "                    normal_admin\n"
             "                ),\n"
             "                editable=(\n"
             "                ),\n"
@@ -24,16 +25,17 @@ class PermissionsGenerator(BaseGenerator):
         imports = f"""from typing import Optional, Dict
 from django.http import HttpRequest
 from ...fields.{self.model_name_lower} import {model_name}Fields
-from django_model_suite.admin import FieldPermissions
+from django_model_suite.admin import FieldPermissions, AdminContextLogic
 from {self.model.__module__} import {model_name}
-from .context import {model_name}ContextLogic
 """
 
         base_class = f"""
 class Base{model_name}Permissions:
     def get_field_rules(self, request: HttpRequest, {self.model_name_lower}: Optional[{model_name}] = None) -> Dict:
-        context = {model_name}ContextLogic(request, {self.model_name_lower})
-
+        super_admin = AdminContextLogic.is_super_admin(request)
+        normal_admin = AdminContextLogic.is_normal_admin(request)
+        created = AdminContextLogic.is_object_created({self.model_name_lower})
+        
         return {{
 {joined_field_rules}
         }}
@@ -104,7 +106,7 @@ class {model_name}InlinePermissions(Base{model_name}Permissions):
             for i, field in enumerate(new_fields):
                 rule = f"            {model_name}Fields.{field.upper()}: FieldPermissions(\n"
                 rule += "                visible=(\n"
-                rule += "                    context.is_superuser\n"
+                rule += "                    normal_admin\n"
                 rule += "                ),\n"
                 rule += "                editable=(\n"
                 rule += "                ),\n"

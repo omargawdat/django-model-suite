@@ -2,9 +2,10 @@ from abc import ABC
 from abc import ABCMeta
 from abc import abstractmethod
 from dataclasses import dataclass
-from typing import Union
+from typing import Union, Optional
 
 from django.contrib.admin.options import ModelAdmin, ShowFacets
+from django.http import HttpRequest
 from simple_history.admin import SimpleHistoryAdmin
 from unfold.admin import ModelAdmin as UnfoldModelAdmin, StackedInline, TabularInline
 
@@ -192,3 +193,18 @@ class BaseStackedInlineMeta(StackedInline.__class__, ABCMeta):
 
 class BaseStackedInline(BaseInlineMixin, StackedInline, metaclass=BaseStackedInlineMeta):
     pass
+
+
+class AdminContextLogic:
+    """Common context logic for admin views"""
+    @staticmethod
+    def is_super_admin(request: HttpRequest) -> bool:
+        return request.user.is_superuser
+        
+    @staticmethod
+    def is_normal_admin(request: HttpRequest) -> bool:
+        return request.user.is_staff
+        
+    @staticmethod
+    def is_object_created(obj) -> bool:
+        return obj is not None
