@@ -3,24 +3,24 @@ import os
 from django.apps import apps
 from django.core.management import BaseCommand
 
-from django_model_suite.generators.admin.admin_generator import AdminGenerator
-from django_model_suite.generators.admin.change_view_generator import ChangeViewGenerator
-from django_model_suite.generators.admin.context_generator import ContextGenerator
-from django_model_suite.generators.admin.display_generator import DisplayGenerator
-from django_model_suite.generators.admin.inline import InlineAdminGenerator
-from django_model_suite.generators.admin.list_view_generator import ListViewGenerator
-from django_model_suite.generators.admin.permissions_generator import PermissionsGenerator
-from django_model_suite.generators.admin.resource_generator import ResourceGenerator
-from django_model_suite.generators.api.filter_generator import FilterGenerator
-from django_model_suite.generators.api.pagination_generator import PaginationGenerator
-from django_model_suite.generators.api.serializer_generator import SerializerGenerator
-from django_model_suite.generators.api.url_generator import URLGenerator
-from django_model_suite.generators.api.view_generator import ViewGenerator
-from django_model_suite.generators.domain.selector_generator import SelectorGenerator
-from django_model_suite.generators.domain.service_generator import ServiceGenerator
-from django_model_suite.generators.domain.validator_generator import ValidatorGenerator
-from django_model_suite.generators.field.fields_generator import FieldsGenerator
-from django_model_suite.generators.model_utils import get_model_fields
+from ...generators.admin.admin_generator import AdminGenerator
+from ...generators.admin.change_view_generator import ChangeViewGenerator
+from ...generators.admin.context_generator import ContextGenerator
+from ...generators.admin.display_generator import DisplayGenerator
+from ...generators.admin.inline import InlineAdminGenerator
+from ...generators.admin.list_view_generator import ListViewGenerator
+from ...generators.admin.permissions_generator import PermissionsGenerator
+from ...generators.admin.resource_generator import ResourceGenerator
+from ...generators.api.filter_generator import FilterGenerator
+from ...generators.api.pagination_generator import PaginationGenerator
+from ...generators.api.serializer_generator import SerializerGenerator
+from ...generators.api.url_generator import URLGenerator
+from ...generators.api.view_generator import ViewGenerator
+from ...generators.domain.selector_generator import SelectorGenerator
+from ...generators.domain.service_generator import ServiceGenerator
+from ...generators.domain.validator_generator import ValidatorGenerator
+from ...generators.field.fields_generator import FieldsGenerator
+from ...generators.model_utils import get_model_fields
 
 
 class Command(BaseCommand):

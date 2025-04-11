@@ -1,5 +1,5 @@
 # serializer_generator.py
-from django_model_suite.generators.base import BaseGenerator
+from ..base import BaseGenerator
 
 class SerializerGenerator(BaseGenerator):
     def generate(self, fields: list) -> None:

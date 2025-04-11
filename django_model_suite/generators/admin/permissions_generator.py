@@ -1,9 +1,16 @@
 # permissions_generator.py
 import re
+from importlib import import_module
 from typing import List
 
+from django.conf import settings
+
 from ..base import BaseGenerator
-from django_model_suite.admin import AdminContextLogic
+
+# Import dynamically from the path in settings
+base_model_admin_path = getattr(settings, 'BASE_MODEL_ADMIN_PATH')
+admin_module = import_module(base_model_admin_path)
+AdminContextLogic = admin_module.AdminContextLogic
 
 
 class PermissionsGenerator(BaseGenerator):
@@ -25,7 +32,7 @@ class PermissionsGenerator(BaseGenerator):
         imports = f"""from typing import Optional, Dict
 from django.http import HttpRequest
 from ...fields.{self.model_name_lower} import {model_name}Fields
-from django_model_suite.admin import FieldPermissions, AdminContextLogic
+from {base_model_admin_path} import FieldPermissions, AdminContextLogic
 from {self.model.__module__} import {model_name}
 """
 

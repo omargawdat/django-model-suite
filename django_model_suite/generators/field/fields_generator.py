@@ -1,5 +1,5 @@
 import re
-from django_model_suite.generators.base import BaseGenerator
+from ..base import BaseGenerator
 
 class FieldsGenerator(BaseGenerator):
     def generate(self, fields: list) -> None:

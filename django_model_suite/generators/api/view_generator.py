@@ -1,4 +1,4 @@
-from django_model_suite.generators.base import BaseGenerator
+from ..base import BaseGenerator
 
 
 class ViewGenerator(BaseGenerator):

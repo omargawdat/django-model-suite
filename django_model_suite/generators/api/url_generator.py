@@ -1,5 +1,5 @@
 # url_generator.py
-from django_model_suite.generators.base import BaseGenerator
+from ..base import BaseGenerator
 
 class URLGenerator(BaseGenerator):
     def generate(self, fields: list) -> None:

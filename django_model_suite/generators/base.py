@@ -2,7 +2,7 @@ import os
 import re
 from abc import ABC, abstractmethod
 
-from django_model_suite.generators.model_utils import ensure_package
+from .model_utils import ensure_package
 
 
 class BaseGenerator(ABC):

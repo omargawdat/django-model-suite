@@ -1,3 +1,4 @@
+from django.conf import settings
 from ..base import BaseGenerator
 
 
@@ -6,8 +7,11 @@ class InlineAdminGenerator(BaseGenerator):
         model_name = self.model.__name__
         model_import_path = f"{self.model.__module__}"
         
+        # Get the base admin path from settings
+        base_model_admin_path = getattr(settings, 'BASE_MODEL_ADMIN_PATH')
+        
         # Import both base classes but use BaseTabularInline by default
-        base_imports = "from django_model_suite.admin import BaseTabularInline, BaseStackedInline"
+        base_imports = f"from {base_model_admin_path} import BaseTabularInline, BaseStackedInline"
 
         # Import permissions class
         perm_import = f"from .permissions import {model_name}InlinePermissions"
@@ -21,7 +25,7 @@ class {model_name}Inline({model_name}InlinePermissions, BaseTabularInline):
     model = {model_name}
     extra = 0
     show_change_link = True
-    tab  = True
+    tab = True
     fields = ()
     autocomplete_fields = ()
 '''
