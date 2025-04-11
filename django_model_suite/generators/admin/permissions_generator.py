@@ -18,6 +18,9 @@ class PermissionsGenerator(BaseGenerator):
             "            )" for field in fields
         ]
 
+        # Pre-join the field rules to avoid backslash in f-string expression
+        joined_field_rules = ',\n'.join(field_rules)
+
         imports = f"""from typing import Optional, Dict
 from django.http import HttpRequest
 from ...fields.{self.model_name_lower} import {model_name}Fields
@@ -32,7 +35,7 @@ class Base{model_name}Permissions:
         context = {model_name}ContextLogic(request, {self.model_name_lower})
 
         return {{
-{',\\n'.join(field_rules)}
+{joined_field_rules}
         }}
         """
 
@@ -67,20 +70,20 @@ class {model_name}InlinePermissions(Base{model_name}Permissions):
             # Skip if no existing content
             if not existing_content.strip():
                 return content
-                
+
             # Check if file has the new structure with Base, Admin and Inline classes
             base_pattern = f"class Base{model_name}Permissions"
             admin_pattern = f"class {model_name}AdminPermissions"
             inline_pattern = f"class {model_name}InlinePermissions"
-            
+
             has_new_structure = base_pattern in existing_content and \
                                 admin_pattern in existing_content and \
                                 inline_pattern in existing_content
-            
+
             # If doesn't have new structure, regenerate
             if not has_new_structure:
                 return content
-                
+
             # Extract existing fields from the file
             existing_fields = []
             field_pattern = rf"{model_name}Fields\.([A-Z_]+)"
@@ -88,14 +91,14 @@ class {model_name}InlinePermissions(Base{model_name}Permissions):
                 match = re.search(field_pattern, line)
                 if match:
                     existing_fields.append(match.group(1))
-            
+
             # Find fields that need to be added (convert to uppercase for comparison)
             new_fields = [field for field in fields if field.upper() not in existing_fields]
-            
+
             # If no new fields, return the existing content
             if not new_fields:
                 return existing_content
-                
+
             # Generate rules for new fields
             new_field_rules = []
             for i, field in enumerate(new_fields):
@@ -106,39 +109,39 @@ class {model_name}InlinePermissions(Base{model_name}Permissions):
                 rule += "                editable=(\n"
                 rule += "                ),\n"
                 rule += "            )"
-                
+
                 # Add a comma if this isn't the last field
                 if i < len(new_fields) - 1:
                     rule += ","
-                    
+
                 new_field_rules.append(rule)
-            
+
             # Find where to insert the new fields
             lines = existing_content.split('\n')
-            
+
             # Look for the return statement and the closing brace
             return_idx = -1
             closing_brace_idx = -1
-            
+
             for i, line in enumerate(lines):
                 if "return {" in line:
                     return_idx = i
                     break
-            
+
             if return_idx == -1:
                 # Can't find where to insert, return new content
                 return content
-                
+
             # Find closing brace after return
             for i, line in enumerate(lines[return_idx:], return_idx):
                 if '}' in line and not '"' in line and not "'" in line:  # Avoid matching braces in strings
                     closing_brace_idx = i
                     break
-            
+
             if closing_brace_idx == -1:
                 # Can't find closing brace, return new content
                 return content
-                
+
             # Determine if we need to add a comma to the last existing field
             needs_comma = False
             for i in range(closing_brace_idx - 1, return_idx, -1):
@@ -149,15 +152,15 @@ class {model_name}InlinePermissions(Base{model_name}Permissions):
                 elif line and (line.endswith(',') or line.endswith('{')):
                     # Already has a comma or is the opening brace
                     break
-                
+
             # Insert new fields before the closing brace
             new_content = (
-                lines[:closing_brace_idx] + 
-                new_field_rules + 
-                lines[closing_brace_idx:]
+                    lines[:closing_brace_idx] +
+                    new_field_rules +
+                    lines[closing_brace_idx:]
             )
-            
+
             return '\n'.join(new_content)
-            
+
         # Use update_file instead of write_file to handle existing files
         self.update_file('permissions.py', content, update_permissions)
