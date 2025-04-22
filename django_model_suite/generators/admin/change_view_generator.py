@@ -11,5 +11,6 @@ class ChangeViewGenerator(BaseGenerator):
     fieldsets = (
         ("Information", {{"fields": ()}}),
     )
+    inlines = []
 '''
         self.write_file('change_view.py', content)

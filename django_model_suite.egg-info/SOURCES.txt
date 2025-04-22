@@ -13,7 +13,6 @@ app/tests.py
 app/views.py
 app/fields/__init__.py
 app/fields/test_model.py
-app/fields/test_model_related.py
 app/migrations/0001_initial.py
 app/migrations/__init__.py
 django_model_suite/__init__.py

@@ -40,6 +40,5 @@ class {model_name}Admin(
     resource_class = {model_name}Resource
     export_form_class = ExportForm
     formats = [CSV]
-    inlines = []
 '''
         self.write_file('admin.py', content)
