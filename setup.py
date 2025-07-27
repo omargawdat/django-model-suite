@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="django_model_suite",
-    version="0.2.0",
+    version="0.2.1",
     author="Omar Gawdat",
     author_email="omargawdaat@gmail.com",
     description="A Django app for generating boilerplate code",

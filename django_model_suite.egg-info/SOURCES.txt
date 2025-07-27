@@ -29,6 +29,7 @@ django_model_suite/generators/model_utils.py
 django_model_suite/generators/admin/__init__.py
 django_model_suite/generators/admin/admin_generator.py
 django_model_suite/generators/admin/change_view_generator.py
+django_model_suite/generators/admin/checklist_generator.py
 django_model_suite/generators/admin/context_generator.py
 django_model_suite/generators/admin/display_generator.py
 django_model_suite/generators/admin/inline.py
