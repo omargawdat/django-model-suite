@@ -5,6 +5,7 @@ from django.core.management import BaseCommand
 
 from ...generators.admin.admin_generator import AdminGenerator
 from ...generators.admin.change_view_generator import ChangeViewGenerator
+from ...generators.admin.checklist_generator import ChecklistGenerator
 from ...generators.admin.context_generator import ContextGenerator
 from ...generators.admin.display_generator import DisplayGenerator
 from ...generators.admin.inline import InlineAdminGenerator
@@ -42,6 +43,7 @@ class Command(BaseCommand):
                 ResourceGenerator,
                 InlineAdminGenerator,
                 AdminGenerator,
+                ChecklistGenerator,
             ],
         },
         "api": {

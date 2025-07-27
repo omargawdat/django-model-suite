@@ -34,7 +34,6 @@ class {model_name}Admin(
     {model_name}ListView,
     {model_name}ChangeView,
     {model_name}AdminPermissions,
-    ExportActionModelAdmin,
     BaseModelAdmin,
 ):
     resource_class = {model_name}Resource
